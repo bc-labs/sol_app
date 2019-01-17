@@ -2,7 +2,12 @@
   <div id="app">
     <div id="nav">
       <p>getMessage</p>
-      <p>{{ message }}</p>
+      <p>Message is:{{ message }}</p>
+
+      <form v-on:submit.prevent="setMessage">
+        <input id="setMessage" ref="setMessage" placeholder="edit me">
+        <input type="submit" value="setMessage">
+      </form>
     </div>
   </div>
 </template>
@@ -74,6 +79,29 @@ export default class Index extends Vue {
         alert("web3 not found.");
       }
     });
+  }
+
+  setMessage() {
+    if (web3 === undefined || contract === undefined) {
+      return;
+    }
+
+    const set_message = this.$refs.setMessage as HTMLInputElement;
+
+    // トランザクションを実行
+    contract.methods
+      .setMessage(set_message.value)
+      .send({ from: this.address, gas: 3000000, gasPrice: 1000000000 })
+      .on("transactionHash", hash => {
+        // Sending the transaction completed.
+        this.transactions = [hash].concat(this.transactions);
+
+        // フォームを初期化
+        // set_message.value = "setMessage Now!";
+      })
+      .on("receipt", receipt => {
+        // Mining completed.
+      });
   }
 
   async awaitable(func: (resolve: () => void) => void): Promise<any> {
