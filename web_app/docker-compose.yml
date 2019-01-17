@@ -1,11 +1,13 @@
-version: '3'
+version: '2.1'
 services:
-  webserver:
-    build: node
-    image: node-express-dev:1.0
-    container_name: node
-    tty: true
-    volumes:
-      - ./node/app:/app
+  web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: npm run dev
+    environment:
+      NODE_ENV: development
     ports:
-      - "8080:3000"
+      - '8080:8080'
+    volumes:
+      - .:/app
