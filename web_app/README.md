@@ -9,7 +9,8 @@ docker-compose build
 
 ## コンテナを起動
 
-```docker-compose up -d
+```
+docker-compose up -d
 ```
 ## コンテナにアクセス
 ```
